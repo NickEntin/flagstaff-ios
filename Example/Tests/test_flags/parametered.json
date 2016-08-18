@@ -1,0 +1,10 @@
+{
+    "key": "parametered",
+    "enabled": true,
+    "parameters": {
+        "number": 20,
+        "string": "Test string",
+        "bool": true,
+    },
+    "ttl": 120,
+}

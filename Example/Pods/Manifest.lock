@@ -1,0 +1,16 @@
+PODS:
+  - Flagstaff (0.1.0)
+
+DEPENDENCIES:
+  - Flagstaff (from `../`)
+
+EXTERNAL SOURCES:
+  Flagstaff:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Flagstaff: 95ce36641f6811df9198535be5d4672e511d761d
+
+PODFILE CHECKSUM: 9263075c6795bd99068b2b268d1ed0749785860b
+
+COCOAPODS: 1.0.1

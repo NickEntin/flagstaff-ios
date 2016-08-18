@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'Flagstaff_Example' do
+  pod 'Flagstaff', :path => '../'
+
+  target 'Flagstaff_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

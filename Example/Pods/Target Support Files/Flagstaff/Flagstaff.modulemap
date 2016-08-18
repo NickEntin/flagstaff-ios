@@ -1,0 +1,6 @@
+framework module Flagstaff {
+  umbrella header "Flagstaff-umbrella.h"
+
+  export *
+  module * { export * }
+}

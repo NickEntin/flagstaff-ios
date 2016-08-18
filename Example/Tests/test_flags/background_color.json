@@ -1,0 +1,10 @@
+{
+    "key": "background_color",
+    "enabled": true,
+    "parameters": {
+        "red": 0.227,
+        "green": 0.450,
+        "blue": 0.859,
+    },
+    "ttl": 120,
+}
