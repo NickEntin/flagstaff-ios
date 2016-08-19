@@ -1,5 +1,6 @@
 # Flagstaff
 
+[![CI Status](http://img.shields.io/travis/NickEntin/flagstaff-ios.svg?style=flat)](https://travis-ci.org/NickEntin/flagstaff-ios)
 [![Version](https://img.shields.io/cocoapods/v/Flagstaff.svg?style=flat)](http://cocoapods.org/pods/Flagstaff)
 [![License](https://img.shields.io/cocoapods/l/Flagstaff.svg?style=flat)](http://cocoapods.org/pods/Flagstaff)
 [![Platform](https://img.shields.io/cocoapods/p/Flagstaff.svg?style=flat)](http://cocoapods.org/pods/Flagstaff)
