@@ -1,16 +1,19 @@
 PODS:
-  - Flagstaff (0.1.0)
+  - Flagstaff (0.1.1)
+  - OCMock (3.3.1)
 
 DEPENDENCIES:
   - Flagstaff (from `../`)
+  - OCMock (~> 3.3)
 
 EXTERNAL SOURCES:
   Flagstaff:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Flagstaff: 95ce36641f6811df9198535be5d4672e511d761d
+  Flagstaff: c59747a2b00c857938eace271adf5cc2d8e96842
+  OCMock: f3f61e6eaa16038c30caa5798c5e49d3307b6f22
 
-PODFILE CHECKSUM: 9263075c6795bd99068b2b268d1ed0749785860b
+PODFILE CHECKSUM: 7ec5df076d4252110b752c0a42e6a9564ffa580a
 
 COCOAPODS: 1.0.1

@@ -24,16 +24,24 @@
 //
 
 #import <XCTest/XCTestCase.h>
+#import <OCMock/OCMock.h>
 
 #import <Flagstaff/FSFlagManager.h>
 
-@interface Tests : XCTestCase
+@interface FSFlagManager ()
+
+- (NSMutableDictionary *)_persistedFlags;
+- (void)_updatePersistedFlags;
+
+@end
+
+@interface FlagstaffTests : XCTestCase
 
 @property (nonatomic) FSFlagManager *flagManager;
 
 @end
 
-@implementation Tests
+@implementation FlagstaffTests
 
 - (void)setUp
 {
@@ -77,5 +85,30 @@
     NSDictionary *defaultParams = @{};
     XCTAssertEqual([self.flagManager parametersForKey:@"missing" defaultValue:defaultParams], defaultParams);
 }
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-value"
+- (void)testPersistenceLoading
+{
+    id flagManager = OCMPartialMock([FSFlagManager alloc]);
+    OCMExpect([flagManager _persistedFlags]);
+    [flagManager initWithURLFormat:@""];
+    OCMVerifyAll(flagManager);
+}
+#pragma clang diagnostic pop
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-value"
+- (void)testPersistenceUpdating
+{
+    NSString *urlFormat = [NSString stringWithFormat:@"file://%@", [[[NSBundle mainBundle] pathForResource:@"enabled" ofType:@"json"] stringByReplacingOccurrencesOfString:@"enabled" withString:@"{flag}"]];
+    id flagManager = OCMPartialMock([FSFlagManager alloc]);
+    OCMStub([flagManager _persistedFlags]).andReturn(nil);
+    [flagManager initWithURLFormat:urlFormat];
+    OCMExpect([flagManager _updatePersistedFlags]);
+    [flagManager enableFeatureForKey:@"enabled"];
+    OCMVerifyAll(flagManager);
+}
+#pragma clang diagnostic pop
 
 @end

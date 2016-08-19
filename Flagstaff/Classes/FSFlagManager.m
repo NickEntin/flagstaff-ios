@@ -54,7 +54,7 @@ const NSString *kFlagTTLJSONKey = @"ttl";
         // Set default flag TTL to default value of 30 minutes
         _defaultFlagTTL = 1800.0;
         
-        _flags = [[NSUserDefaults standardUserDefaults] objectForKey:(NSString *)kFlagstaffFlagsUserDefaultsKey];
+        _flags = [self _persistedFlags];
         if (!_flags) {
             _flags = [NSMutableDictionary dictionary];
         }
@@ -140,6 +140,7 @@ const NSString *kFlagTTLJSONKey = @"ttl";
                                        FSFlag *flag = [self _flagFromDictionary:json];
                                        if (flag) {
                                            [self.flags setObject:flag forKey:flag.key];
+                                           [self _updatePersistedFlags];
                                        }
                                    }
                                }
@@ -186,6 +187,18 @@ const NSString *kFlagTTLJSONKey = @"ttl";
         return flag;
     }
     return nil;
+}
+
+#pragma mark - Flag Persistence (Private)
+
+- (NSMutableDictionary *)_persistedFlags
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:(NSString *)kFlagstaffFlagsUserDefaultsKey];
+}
+
+- (void)_updatePersistedFlags
+{
+    [[NSUserDefaults standardUserDefaults] setObject:self.flags forKey:(NSString *)kFlagstaffFlagsUserDefaultsKey];
 }
 
 @end

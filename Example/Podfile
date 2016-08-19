@@ -6,6 +6,6 @@ target 'Flagstaff_Example' do
   target 'Flagstaff_Tests' do
     inherit! :search_paths
 
-    
+    pod 'OCMock', '~> 3.3'
   end
 end
