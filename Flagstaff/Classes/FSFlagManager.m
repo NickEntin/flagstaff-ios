@@ -42,6 +42,7 @@ const NSString *kFlagKeyJSONKey = @"key";
 const NSString *kFlagEnabledJSONKey = @"enabled";
 const NSString *kFlagParametersJSONKey = @"parameters";
 const NSString *kFlagTTLJSONKey = @"ttl";
+const NSString *kFlagLastUpdatedJSONKey = @"last_updated";
 
 - (instancetype)initWithURLFormat:(NSString *)urlFormat
 {
@@ -139,6 +140,7 @@ const NSString *kFlagTTLJSONKey = @"ttl";
                                    if (!parseError && json) {
                                        FSFlag *flag = [self _flagFromDictionary:json];
                                        if (flag) {
+                                           flag.lastUpdated = [NSDate date];
                                            [self.flags setObject:flag forKey:flag.key];
                                            [self _updatePersistedFlags];
                                        }
@@ -182,7 +184,11 @@ const NSString *kFlagTTLJSONKey = @"ttl";
         NSNumber *ttl = [dictionary objectForKey:kFlagTTLJSONKey];
         flag.ttl = ttl ? [ttl doubleValue] : self.defaultFlagTTL;
         
-        flag.lastUpdated = [NSDate date];
+        if ([dictionary objectForKey:kFlagLastUpdatedJSONKey]) {
+            flag.lastUpdated = [dictionary objectForKey:kFlagLastUpdatedJSONKey];
+        } else {
+            flag.lastUpdated = [NSDate date];
+        }
         
         return flag;
     }
@@ -193,12 +199,32 @@ const NSString *kFlagTTLJSONKey = @"ttl";
 
 - (NSMutableDictionary *)_persistedFlags
 {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:(NSString *)kFlagstaffFlagsUserDefaultsKey];
+    NSArray *flagDictionaryArray = [[NSUserDefaults standardUserDefaults] objectForKey:(NSString *)kFlagstaffFlagsUserDefaultsKey];
+    NSMutableDictionary *flags = [[NSMutableDictionary<NSString *, FSFlag *> alloc] initWithCapacity:flagDictionaryArray.count];
+    for (NSDictionary *dictionary in flagDictionaryArray) {
+        FSFlag *flag = [self _flagFromDictionary:dictionary];
+        if (flag) {
+            [flags setObject:flag forKey:flag.key];
+        }
+    }
+    return flags;
 }
 
 - (void)_updatePersistedFlags
 {
-    [[NSUserDefaults standardUserDefaults] setObject:self.flags forKey:(NSString *)kFlagstaffFlagsUserDefaultsKey];
+    NSMutableArray *flagDictionaryArray = [[NSMutableArray alloc] init];
+    for (NSString *key in self.flags) {
+        FSFlag *flag = [self.flags objectForKey:key];
+        NSMutableDictionary *flagDictionary = [[NSMutableDictionary alloc] init];
+        [flagDictionary setObject:flag.key forKey:kFlagKeyJSONKey];
+        [flagDictionary setObject:[NSNumber numberWithBool:flag.enabled] forKey:kFlagEnabledJSONKey];
+        if (flag.parameters) {
+            [flagDictionary setObject:flag.parameters forKey:kFlagParametersJSONKey];
+        }
+        [flagDictionary setObject:flag.lastUpdated forKey:kFlagLastUpdatedJSONKey];
+        [flagDictionary setObject:[NSNumber numberWithDouble:flag.ttl] forKey:kFlagTTLJSONKey];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:flagDictionaryArray forKey:(NSString *)kFlagstaffFlagsUserDefaultsKey];
 }
 
 @end
